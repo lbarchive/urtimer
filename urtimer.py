@@ -1,0 +1,168 @@
+#!/usr/bin/env python
+#
+# Copyright (C) 2011 by Yu-Jie Lin
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#
+# Function:
+#   1) Countdown timer: when reaches zero, the program exits
+#
+# Keys:
+#   z/a  : decrease/increase hour
+#   x/s  : decrease/increase minute
+#   c/d  : decrease/increase second
+#   space: start/pause timer
+#   q    : quit the program
+#
+# Mouse:
+#   Left : start/pause timer
+
+
+import time
+
+import urwid
+
+
+class TimerWidget(urwid.BigText):
+
+  _selectable = True
+  _modes = ('countdown', )
+  signals = ['started', 'ended']
+
+  def __init__(self, mode=_modes[0], t=60*5, font=None):
+
+    self.started = False
+    self.mode = mode
+    self.t = t
+    self.set_text(self.format_text(t))
+    if not font:
+      self.font = urwid.HalfBlock6x5Font()
+    self.__super.__init__(self.get_text()[0], self.font)
+
+  def to_hms(self, ss):
+
+    hh = int(ss / 3600)
+    ss = ss - hh * 3600
+    mm = int(ss / 60)
+    # truncate to first digit after decimal
+    ss = int((ss - mm * 60) * 10) / 10.0
+    return hh, mm, ss
+
+  def format_text(self, ss):
+
+    return '%02d:%02d:%04.1f' % self.to_hms(ss)
+
+  @property
+  def t(self):
+
+    return self._t
+
+  @t.setter
+  def t(self, t):
+
+    if self.mode == 'countdown' and t < 0:
+      t = 0
+    self._t = t
+
+  def start_pause(self):
+
+    if self.started:
+      self.t -= time.time() - self._started
+      self.started = False
+      self._emit('paused')
+    else:
+      self._started = time.time()
+      self.started = True
+      self._emit('started')
+
+  def update(self):
+
+    if self.started:
+      elapsed = time.time() - self._started
+      remaining = self.t - elapsed
+      if self.mode == 'countdown' and remaining <= 0:
+        self.started == False
+        remaining = 0
+      self.set_text(self.format_text(remaining))
+      if remaining:
+        return True
+      else:
+        self._emit('ended')
+
+  def keypress(self, size, key):
+
+    if key in ('z', 'a'):
+      self.t += 3600 if key == 'a' else -3600
+    elif key in ('x', 's'):
+      self.t += 60 if key == 's' else -60
+    elif key in ('c', 'd'):
+      self.t += 1 if key == 'd' else -1
+    elif key == ' ':
+      self.start_pause()
+    else:
+      return key
+    if not self.started:
+      self.set_text(self.format_text(self.t))
+
+  def mouse_event(self, size, event, button, col, row, focus):
+
+    if event == 'mouse press' and button == 1:
+      self.start_pause()
+    else:
+      return False
+
+
+def unhandled_input(key):
+
+  if key in ('q', 'Q'):
+    raise urwid.ExitMainLoop
+
+
+def update_timer(loop, timer):
+
+  if not timer.started:
+    return
+  if timer.update():
+    loop.set_alarm_in(0.1, update_timer, timer)
+
+
+def start_update_timer(timer, loop):
+
+  update_timer(loop, timer)
+
+
+def end_timer(timer, loop):
+
+  raise urwid.ExitMainLoop
+
+
+def main():
+
+  timer = TimerWidget()
+  timer_pad = urwid.Padding(timer, align='center', width='clip')
+  timer_fill = urwid.Filler(timer_pad)
+
+  loop = urwid.MainLoop(timer_fill, unhandled_input=unhandled_input)
+  urwid.connect_signal(timer, 'started', start_update_timer, loop)
+  urwid.connect_signal(timer, 'ended', end_timer, loop)
+  loop.run()
+
+
+if __name__ == '__main__':
+  main()
