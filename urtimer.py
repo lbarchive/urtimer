@@ -122,7 +122,8 @@ class TimerWidget(urwid.BigText):
 
   def mouse_event(self, size, event, button, col, row, focus):
 
-    if event == 'mouse press' and button == 1:
+    if event == 'mouse press' and button == 1 and \
+        col < self.pack()[0] and row < self.pack()[1]:
       self.start_pause()
     else:
       return False
