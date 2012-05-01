@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (C) 2011 by Yu-Jie Lin
+# Copyright (C) 2011, 2012 by Yu-Jie Lin
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -37,6 +37,16 @@
 import time
 
 import urwid
+
+
+__program__     = 'urtimer'
+__version__     = '0.1.0'
+__license__     = 'MIT'
+__description__ = 'Simple countdown timer using urwid'
+__website__     = 'https://bitbucket.org/livibetter/urtimer'
+
+__author__ = 'Yu-Jie Lin'
+__email__  = 'livibetter@gmail.com'
 
 
 class TimerWidget(urwid.BigText):
