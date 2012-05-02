@@ -54,11 +54,11 @@ class TimerWidget(urwid.BigText):
 
   def to_hms(self, ss):
 
-    hh = int(ss / 3600)
+    hh = ss // 3600
     ss = ss - hh * 3600
-    mm = int(ss / 60)
+    mm = ss // 60
     # truncate to first digit after decimal
-    ss = int((ss - mm * 60) * 10) / 10.0
+    ss = (ss - mm * 60) * 10 / 10.0
     return hh, mm, ss
 
   def format_text(self, ss):
