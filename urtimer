@@ -19,19 +19,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-#
-# Function:
-#   1) Countdown timer: when reaches zero, the program exits
-#
-# Keys:
-#   z/a  : decrease/increase hour
-#   x/s  : decrease/increase minute
-#   c/d  : decrease/increase second
-#   space: start/pause timer
-#   q    : quit the program
-#
-# Mouse:
-#   Left : start/pause timer
 
 
 import time

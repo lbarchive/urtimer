@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from setuptools import setup
+import sys
 
 script_name = 'urtimer'
 
@@ -15,13 +16,19 @@ setup(
   name        = meta['program'],
   version     = meta['version'],
   license     = meta['license'],
-  description = meta['description'],
   url         = meta['website'],
+
+  description      = meta['description'],
+  long_description = open('README.rst').read(),
 
   author       = meta['author'],
   author_email = meta['email'],
   
   scripts = [script_name],
+
+  package_data = {
+    '': ['*.rst'],
+    },
 
   install_requires = ['distribute', 'urwid'],
   )
