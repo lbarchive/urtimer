@@ -12,6 +12,17 @@ with open(script_name) as f:
       (line.split('=') for line in f if line.startswith('__'))
     )
 
+classifiers = [
+  'Development Status :: 5 - Production/Stable',
+  'Environment :: Console',
+  'Intended Audience :: End Users/Desktop',
+  'License :: OSI Approved :: MIT License',
+  'Natural Language :: English',
+  'Operating System :: POSIX',
+  'Programming Language :: Python :: 2',
+  'Topic :: Utilities',
+  ]
+
 setup(
   name        = meta['program'],
   version     = meta['version'],
@@ -20,6 +31,8 @@ setup(
 
   description      = meta['description'],
   long_description = open('README.rst').read(),
+
+  classifiers = classifiers,
 
   author       = meta['author'],
   author_email = meta['email'],
