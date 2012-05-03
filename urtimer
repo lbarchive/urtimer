@@ -21,6 +21,9 @@
 # THE SOFTWARE.
 
 
+import argparse
+import re
+import sys
 import time
 
 import urwid
@@ -34,6 +37,11 @@ __website__     = 'https://bitbucket.org/livibetter/urtimer'
 
 __author__ = 'Yu-Jie Lin'
 __email__  = 'livibetter@gmail.com'
+
+
+class UserInterrupt(Exception):
+
+  pass
 
 
 class TimerWidget(urwid.BigText):
@@ -129,7 +137,7 @@ class TimerWidget(urwid.BigText):
 def unhandled_input(key):
 
   if key in ('q', 'Q'):
-    raise urwid.ExitMainLoop
+    raise UserInterrupt
 
 
 def update_timer(loop, timer):
@@ -150,16 +158,58 @@ def end_timer(timer, loop):
   raise urwid.ExitMainLoop
 
 
+TU_SEC = {'s': 1, 'm': 60, 'h': 3600, 'd': 86400}
+RE_TIME_COMP = re.compile('(\d+)([%s])' % ''.join(TU_SEC.keys()), re.I)
+RE_TIME_TAG = re.compile('^(?:(?:(\d+):)?(\d+):)?(\d+)$')
+
+def human_time(value):
+  '''Convert human readable time to seconds'''
+
+  m = RE_TIME_TAG.match(value)
+  if m:
+    matches = zip(m.groups(), ('h', 'm', 's'))
+    return sum(int(n or 0) * TU_SEC[unit] for n, unit in matches)
+
+  matches = RE_TIME_COMP.findall(value)
+  if matches:
+    return sum(int(n) * TU_SEC[unit] for n, unit in matches)
+  
+  raise argparse.ArgumentTypeError('%r is not a human readable time' % value)
+
+
 def main():
 
-  timer = TimerWidget()
+  parser = argparse.ArgumentParser(description=__description__)
+  parser.add_argument('-s', '--start',
+                      action='store_true',
+                      help='Start timer when %(prog) starts',
+                     )
+  parser.add_argument('time',
+                      nargs='+',
+                      default=[300],
+                      type=human_time,
+                      help='Countdown started at (default: 5m)',
+                     )
+  args = parser.parse_args()
+
+  total_time = sum(args.time)
+
+  timer = TimerWidget(t=total_time)
   timer_pad = urwid.Padding(timer, align='center', width='clip')
   timer_fill = urwid.Filler(timer_pad)
 
   loop = urwid.MainLoop(timer_fill, unhandled_input=unhandled_input)
   urwid.connect_signal(timer, 'started', start_update_timer, loop)
   urwid.connect_signal(timer, 'ended', end_timer, loop)
-  loop.run()
+  if args.start:
+    timer.start_pause()
+
+  try:
+    loop.run()
+  except KeyboardInterrupt:
+    sys.exit(130)
+  except UserInterrupt:
+    sys.exit(129)
 
 
 if __name__ == '__main__':
