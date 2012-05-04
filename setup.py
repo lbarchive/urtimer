@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from setuptools import setup
-import sys
+from setuptools import Command, setup
+from distutils.command.build import build
 
 script_name = 'urtimer'
 
@@ -23,7 +23,33 @@ classifiers = [
   'Topic :: Utilities',
   ]
 
-setup(
+class build_manpages(Command):
+
+  description = 'build manpages'
+  user_options = []
+
+  def initialize_options(self):
+
+    pass
+
+  def finalize_options(self):
+
+    pass
+
+  def run(self):
+
+    print('building manpages')
+    with open('README.rst') as f:
+      source = f.read()
+
+    doc_parts = publish_parts(
+      source,
+      writer_name="manpage")
+
+    with open('man/urtimer.1', 'w') as f:
+      f.write(doc_parts['whole'])
+
+setup_d = dict(
   name        = meta['program'],
   version     = meta['version'],
   license     = meta['license'],
@@ -43,5 +69,19 @@ setup(
     '': ['*.rst'],
     },
 
+  data_files = [
+    ('man/man1', ['man/urtimer.1']),
+    ],
+
   install_requires = ['distribute', 'urwid'],
   )
+
+try:
+  from docutils.core import publish_parts
+  build.sub_commands.append(('build_manpages', None))
+  setup_d['cmdclass'] = {'build_manpages': build_manpages}
+except ImportError:
+  pass
+
+if __name__ = '__main__':
+  setup(**setup_d)
