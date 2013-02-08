@@ -83,5 +83,5 @@ try:
 except ImportError:
   pass
 
-if __name__ = '__main__':
+if __name__ == '__main__':
   setup(**setup_d)
