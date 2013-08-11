@@ -29,7 +29,7 @@ import urwid
 
 
 __program__ = 'urtimer'
-__version__ = '0.2'
+__version__ = '0.2.1'
 __license__ = 'MIT'
 __description__ = 'Simple countdown timer using urwid'
 __website__ = 'https://bitbucket.org/livibetter/urtimer'
