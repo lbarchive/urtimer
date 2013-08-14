@@ -21,6 +21,7 @@
 
 
 import argparse
+import math
 import re
 import sys
 import time
@@ -49,11 +50,12 @@ class TimerWidget(urwid.BigText):
   _modes = ('countdown', )
   signals = ['started', 'ended']
 
-  def __init__(self, mode=_modes[0], t=60*5, font=None):
+  def __init__(self, mode=_modes[0], t=60*5, font=None, no_ds=False):
 
     self.started = False
     self.mode = mode
     self.t = t
+    self.no_ds = no_ds
     self.set_text(self.format_text(t))
     if not font:
       self.font = urwid.HalfBlock6x5Font()
@@ -70,7 +72,8 @@ class TimerWidget(urwid.BigText):
 
   def format_text(self, ss):
 
-    return '%02d:%02d:%04.1f' % self.to_hms(ss)
+    fmt = '%02d:%02d:%02d' if self.no_ds else '%02d:%02d:%04.1f'
+    return fmt % self.to_hms(ss)
 
   @property
   def t(self):
@@ -100,9 +103,12 @@ class TimerWidget(urwid.BigText):
     if self.started:
       elapsed = time.time() - self._started
       remaining = self.t - elapsed
-      if self.mode == 'countdown' and remaining <= 0:
-        self.started = False
-        remaining = 0
+      if self.mode == 'countdown':
+        if self.no_ds:
+          remaining = math.ceil(remaining)
+        if remaining <= 0:
+          self.started = False
+          remaining = 0
       self.set_text(self.format_text(remaining))
       if remaining:
         return True
@@ -180,9 +186,12 @@ def human_time(value):
 
 def main():
 
-  parser = argparse.ArgumentParser(description=__description__)
+  parser = argparse.ArgumentParser(description=__description__,
+                                   version=__version__)
   parser.add_argument('-s', '--start', action='store_true',
                       help='Start timer when %(prog)s starts')
+  parser.add_argument('-D', '--no-ds', action='store_true',
+                      help='No display of deciseconds (tenth of second)')
   parser.add_argument('time', nargs='*', default=[300], metavar='TIME',
                       type=human_time,
                       help=('Countdown started at, '
@@ -191,7 +200,7 @@ def main():
 
   total_time = sum(args.time)
 
-  timer = TimerWidget(t=total_time)
+  timer = TimerWidget(t=total_time, no_ds=args.no_ds)
   timer_pad = urwid.Padding(timer, align='center', width='clip')
   timer_fill = urwid.Filler(timer_pad)
 

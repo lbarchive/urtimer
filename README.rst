@@ -16,7 +16,7 @@ A simple countdown timer using urwid.
 Synopsis
 ========
 
-**urtimer** [-h] [-s] [*TIME* [*TIME* ...]]
+**urtimer** [-h] [-s] [-D] [*TIME* [*TIME* ...]]
 
 Description
 ===========
@@ -25,6 +25,7 @@ TIME specify the countdown time in format of NUMBER[SUFFIX], SUFFIX can be 'd', 
 
 -h, --help   show this help message and exit
 -s, --start  Start timer when urtimer starts
+-D, --no-ds  do not show deciseconds
 
 Functions
 =========
