@@ -47,14 +47,14 @@ class UserInterrupt(Exception):
 class TimerWidget(urwid.BigText):
 
   _selectable = True
-  _modes = ('countdown', )
+  _modes = ('countdown', 'stopwatch')
   signals = ['started', 'ended']
 
-  def __init__(self, mode=_modes[0], t=60*5, font=None, no_ds=False):
+  def __init__(self, t=60*5, font=None, no_ds=False, mode=_modes[0]):
 
     self.started = False
     self.mode = mode
-    self.t = t
+    self.t = t if mode == 'countdown' else 0
     self.no_ds = no_ds
     self.set_text(self.format_text(t))
     if not font:
@@ -77,7 +77,9 @@ class TimerWidget(urwid.BigText):
 
   @property
   def t(self):
-
+    """
+    Remaining second for countdown mode; or elapsed second for stopwatch mode
+    """
     return self._t
 
   @t.setter
@@ -90,11 +92,17 @@ class TimerWidget(urwid.BigText):
   def start_pause(self):
 
     if self.started:
-      self.t -= time.time() - self._started
+      if self.mode == 'countdown':
+        self.t -= time.time() - self._started
+      else:
+        self.t = time.time() - self._started
       self.started = False
       self._emit('paused')
     else:
-      self._started = time.time()
+      if self.mode == 'countdown':
+        self._started = time.time()
+      else:
+        self._started = time.time() - self.t
       self.started = True
       self._emit('started')
 
@@ -102,13 +110,16 @@ class TimerWidget(urwid.BigText):
 
     if self.started:
       elapsed = time.time() - self._started
+      if self.mode == 'stopwatch':
+        self.set_text(self.format_text(elapsed))
+        return True
+      # mode == 'countdown'
       remaining = self.t - elapsed
-      if self.mode == 'countdown':
-        if self.no_ds:
-          remaining = math.ceil(remaining)
-        if remaining <= 0:
-          self.started = False
-          remaining = 0
+      if self.no_ds:
+        remaining = math.ceil(remaining)
+      if remaining <= 0:
+        self.started = False
+        remaining = 0
       self.set_text(self.format_text(remaining))
       if remaining:
         return True
@@ -193,6 +204,8 @@ def main():
                             '"5:35 PM", "noon", or "tomorrow 1 am". '
                             'This option ignores TIME, '
                             'requires parsedatetime package'))
+  parser.add_argument('-S', '--stopwatch', action='store_true',
+                      help='stopwatch mode')
   parser.add_argument('-s', '--start', action='store_true',
                       help='Start timer when %(prog)s starts')
   parser.add_argument('-D', '--no-ds', action='store_true',
@@ -200,6 +213,7 @@ def main():
   parser.add_argument('time', nargs='*', default=[300], metavar='TIME',
                       type=human_time,
                       help=('Countdown started at, '
+                            'do not work with stopwatch, '
                             'supported suffixes: d, h, m, s. (default: 5m)'))
   args = parser.parse_args()
 
@@ -214,7 +228,12 @@ def main():
   else:
     total_time = sum(args.time)
 
-  timer = TimerWidget(t=total_time, no_ds=args.no_ds)
+  mode = 'countdown'
+  if args.stopwatch:
+    mode = 'stopwatch'
+    total_time = 0
+
+  timer = TimerWidget(mode=mode, t=total_time, no_ds=args.no_ds)
   timer_pad = urwid.Padding(timer, align='center', width='clip')
   timer_fill = urwid.Filler(timer_pad)
 
@@ -229,8 +248,8 @@ def main():
   except KeyboardInterrupt:
     sys.exit(130)
   except UserInterrupt:
-    sys.exit(129)
-
+    if mode == 'countdown':
+      sys.exit(129)
 
 if __name__ == '__main__':
   main()
