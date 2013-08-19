@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 
 
+from __future__ import print_function
 import argparse
 import math
 import re
@@ -109,7 +110,7 @@ class TimerWidget(urwid.BigText):
   def update(self):
 
     if self.started:
-      elapsed = time.time() - self._started
+      self.elapsed = elapsed = time.time() - self._started
       if self.mode == 'stopwatch':
         self.set_text(self.format_text(elapsed))
         return True
@@ -210,6 +211,9 @@ def main():
                       help='Start timer when %(prog)s starts')
   parser.add_argument('-D', '--no-ds', action='store_true',
                       help='No display of deciseconds (tenth of second)')
+  parser.add_argument('-w', '--write-elapsed', metavar='FILE',
+                      type=argparse.FileType('w'),
+                      help='write final elapsed time to FILE')
   parser.add_argument('time', nargs='*', default=[300], metavar='TIME',
                       type=human_time,
                       help=('Countdown started at, '
@@ -243,13 +247,19 @@ def main():
   if args.start:
     timer.start_pause()
 
+  ret = 0
   try:
     loop.run()
   except KeyboardInterrupt:
-    sys.exit(130)
+    ret = 130
   except UserInterrupt:
     if mode == 'countdown':
-      sys.exit(129)
+      ret = 129
+
+  if args.write_elapsed:
+    print(timer.elapsed, file=args.write_elapsed)
+
+  return ret
 
 if __name__ == '__main__':
-  main()
+  sys.exit(main())

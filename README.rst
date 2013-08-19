@@ -16,7 +16,7 @@ A simple countdown timer using urwid.
 Synopsis
 ========
 
-**urtimer** [-h] [-v] [-d *DATE*] [-S] [-s] [-D] [*TIME* [*TIME* ...]]
+**urtimer** [-h] [-v] [-d *DATE*] [-S] [-s] [-D] [-w *FILE*] [*TIME* [*TIME* ...]]
 
 Description
 ===========
@@ -25,13 +25,16 @@ TIME specify the countdown time in format of NUMBER[SUFFIX], SUFFIX can be 'd', 
 
 -h, --help     show this help message and exit
 -v, --version  show program's version number and exit
--d, --date     calculate countdown from the date, for example, "5:35
+-d DATE, --date DATE
+               calculate countdown from the date, for example, "5:35
                PM", "noon", or "tomorrow 1 am". This option ignores
                TIME, requires parsedatetime package
 -S, --stopwatch
                stopwatch mode
 -s, --start    start timer when urtimer starts
 -D, --no-ds    do not show deciseconds
+-w FILE, --write-elapsed FILE
+               write final elapsed time to FILE
 
 Functions
 =========
