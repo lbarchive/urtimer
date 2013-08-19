@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 
 from __future__ import print_function
+import codecs
 from distutils.command.build import build
 from setuptools import Command, setup
 import sys
@@ -55,7 +56,7 @@ class build_manpages(Command):
       source,
       writer_name="manpage")
 
-    with open('man/urtimer.1', 'w') as f:
+    with codecs.open('man/urtimer.1', 'w', encoding='utf8') as f:
       f.write(doc_parts['whole'])
 
 
