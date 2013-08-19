@@ -30,7 +30,7 @@ INSTALL_TEST_DIR=/tmp/$(PACKAGE)_install_test
 VENV_PY2_CMD=virtualenv-python2.7
 VENV_PY3_CMD=virtualenv-python3.2
 
-BUILD_CMD=./setup.py sdist --formats gztar,zip bdist_wininst --plat-name win32
+BUILD_CMD=./setup.py sdist --formats gztar,zip
 
 build:
 	$(BUILD_CMD)
