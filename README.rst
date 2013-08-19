@@ -16,16 +16,20 @@ A simple countdown timer using urwid.
 Synopsis
 ========
 
-**urtimer** [-h] [-s] [-D] [*TIME* [*TIME* ...]]
+**urtimer** [-h] [-v] [-d *DATE*] [-s] [-D] [*TIME* [*TIME* ...]]
 
 Description
 ===========
 
 TIME specify the countdown time in format of NUMBER[SUFFIX], SUFFIX can be 'd', 'h', 'm', 's'. Default is 's' if SUFFIX is omitted. TIME can be used multiple times and they will be summed up.
 
--h, --help   show this help message and exit
--s, --start  Start timer when urtimer starts
--D, --no-ds  do not show deciseconds
+-h, --help     show this help message and exit
+-v, --version  show program's version number and exit
+-d, --date     calculate countdown from the date, for example, "5:35
+               PM", "noon", or "tomorrow 1 am". This option ignores
+               TIME, requires parsedatetime package
+-s, --start    Start timer when urtimer starts
+-D, --no-ds    do not show deciseconds
 
 Functions
 =========

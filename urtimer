@@ -188,6 +188,11 @@ def main():
 
   parser = argparse.ArgumentParser(description=__description__,
                                    version=__version__)
+  parser.add_argument('-d', '--date',
+                      help=('calculate countdown from the date, for example, '
+                            '"5:35 PM", "noon", or "tomorrow 1 am". '
+                            'This option ignores TIME, '
+                            'requires parsedatetime package'))
   parser.add_argument('-s', '--start', action='store_true',
                       help='Start timer when %(prog)s starts')
   parser.add_argument('-D', '--no-ds', action='store_true',
@@ -198,7 +203,16 @@ def main():
                             'supported suffixes: d, h, m, s. (default: 5m)'))
   args = parser.parse_args()
 
-  total_time = sum(args.time)
+  if args.date:
+    import datetime as dt
+    import parsedatetime.parsedatetime as pdt
+    cal = pdt.Calendar()
+    sourcetime = cal.parse(args.date)[0]
+    d = dt.datetime.fromtimestamp(time.mktime(sourcetime))
+    delta = d - dt.datetime.now()
+    total_time = int(delta.total_seconds())
+  else:
+    total_time = sum(args.time)
 
   timer = TimerWidget(t=total_time, no_ds=args.no_ds)
   timer_pad = urwid.Padding(timer, align='center', width='clip')
