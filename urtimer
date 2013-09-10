@@ -229,6 +229,10 @@ def main():
     d = dt.datetime.fromtimestamp(time.mktime(sourcetime))
     delta = d - dt.datetime.now()
     total_time = int(delta.total_seconds())
+    if total_time < 0:
+      print('Parsed date of "%s" is %s' % (args.date, d), file=sys.stderr)
+      print('Which is in the past and invalid.', file=sys.stderr)
+      sys.exit(1)
   else:
     total_time = sum(args.time)
 
