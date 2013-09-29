@@ -51,12 +51,14 @@ class TimerWidget(urwid.BigText):
   _modes = ('countdown', 'stopwatch')
   signals = ['started', 'ended']
 
-  def __init__(self, t=60*5, font=None, no_ds=False, mode=_modes[0]):
+  def __init__(self, t=60*5, font=None, no_ds=False, no_title=False,
+               mode=_modes[0]):
 
     self.started = False
     self.mode = mode
     self.t = t if mode == 'countdown' else 0
     self.no_ds = no_ds
+    self.no_title = no_title
     self.set_text(self.format_text(t))
     if not font:
       self.font = urwid.HalfBlock6x5Font()
@@ -126,6 +128,12 @@ class TimerWidget(urwid.BigText):
         return True
       else:
         self._emit('ended')
+
+  def set_text(self, text):
+
+    super(TimerWidget, self).set_text(text)
+    if not self.no_title:
+      print('\33]2;%s\007' % text, end='')
 
   def keypress(self, size, key):
 
@@ -211,6 +219,8 @@ def main():
                       help='Start timer when %(prog)s starts')
   parser.add_argument('-D', '--no-ds', action='store_true',
                       help='No display of deciseconds (tenth of second)')
+  parser.add_argument('-T', '--no-title', action='store_true',
+                      help='Do not set window title')
   parser.add_argument('-w', '--write-elapsed', metavar='FILE',
                       type=argparse.FileType('w'),
                       help='write final elapsed time to FILE')
@@ -241,7 +251,8 @@ def main():
     mode = 'stopwatch'
     total_time = 0
 
-  timer = TimerWidget(mode=mode, t=total_time, no_ds=args.no_ds)
+  timer = TimerWidget(mode=mode, t=total_time, no_ds=args.no_ds,
+                      no_title=args.no_title)
   timer_pad = urwid.Padding(timer, align='center', width='clip')
   timer_fill = urwid.Filler(timer_pad)
 

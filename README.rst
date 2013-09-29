@@ -48,6 +48,8 @@ TIME specify the countdown time in format of NUMBER[SUFFIX], SUFFIX can be 'd', 
                stopwatch mode
 -s, --start    start timer when urtimer starts
 -D, --no-ds    do not show deciseconds
+-T, --no-title 
+               Do not set window title
 -w FILE, --write-elapsed FILE
                write final elapsed time to FILE
 
