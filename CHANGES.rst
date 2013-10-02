@@ -6,6 +6,12 @@ CHANGES
   :local:
 
 
+Release 0.5.1: 2013-10-02T02:05:01Z
+===================================
+
+* minor changes to documentations
+
+
 Release 0.5.0: 2013-09-29
 =========================
 
