@@ -49,7 +49,7 @@ class build_manpages(Command):
   def run(self):
 
     print('building manpages')
-    with open('README.rst') as f:
+    with open('urtimer.1.rst') as f:
       source = f.read()
 
     doc_parts = publish_parts(

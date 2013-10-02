@@ -33,7 +33,7 @@ import urwid
 __program__ = 'urtimer'
 __version__ = '0.5.0'
 __license__ = 'MIT License'
-__description__ = 'Simple countdown timer using urwid'
+__description__ = 'Simple countdown timer and stopwatch using urwid'
 __website__ = 'https://bitbucket.org/livibetter/urtimer'
 
 __author__ = 'Yu-Jie Lin'
@@ -216,17 +216,17 @@ def main():
   parser.add_argument('-S', '--stopwatch', action='store_true',
                       help='stopwatch mode')
   parser.add_argument('-s', '--start', action='store_true',
-                      help='Start timer when %(prog)s starts')
+                      help='start timer when %(prog)s starts')
   parser.add_argument('-D', '--no-ds', action='store_true',
-                      help='No display of deciseconds (tenth of second)')
+                      help='do not show deciseconds (tenth of second)')
   parser.add_argument('-T', '--no-title', action='store_true',
-                      help='Do not set window title')
+                      help='do not set window title')
   parser.add_argument('-w', '--write-elapsed', metavar='FILE',
                       type=argparse.FileType('w'),
                       help='write final elapsed time to FILE')
   parser.add_argument('time', nargs='*', default=[300], metavar='TIME',
                       type=human_time,
-                      help=('Countdown started at, '
+                      help=('countdown started at, '
                             'do not work with stopwatch, '
                             'supported suffixes: d, h, m, s. (default: 5m)'))
   args = parser.parse_args()

@@ -1,2 +1,3 @@
 include README.rst
+include urtimer.1.rst
 include man/urtimer.1

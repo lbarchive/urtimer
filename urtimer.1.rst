@@ -6,7 +6,20 @@ urtimer
 A simple countdown timer and stopwatch using urwid.
 ---------------------------------------------------
 
-It looks like::
+:Author: Yu-Jie Lin <livibetter@gmail.com>
+:Date: 2013-09-29
+:Copyright: Copyright 2011-2013 Yu-Jie Lin. MIT License.
+:Version: 0.5.0
+:Manual section: 1
+:Manual group: User Commands
+
+
+Synopsis
+========
+
+**urtimer** [-h] [-v] [-d *DATE*] [-S] [-s] [-D] [-w *FILE*] [*TIME* [*TIME* ...]]
+
+::
 
   +---------------------------------------------------------+
   |                                                         |
@@ -20,35 +33,33 @@ It looks like::
   |                                                         |
   +---------------------------------------------------------+
 
-You can also watch a `demostration clip`__.
 
-__ http://youtu.be/ypqxhV5SIgE
+Description
+===========
 
-.. contents:: **Contents**
-  :local:
+TIME specify the countdown time in format of NUMBER[SUFFIX], SUFFIX can be 'd', 'h', 'm', 's'. Default is 's' if SUFFIX is omitted. TIME can be used multiple times and they will be summed up.
+
+-h, --help     show this help message and exit
+-v, --version  show program's version number and exit
+-d DATE, --date DATE
+               calculate countdown from the date, for example, "5:35
+               PM", "noon", or "tomorrow 1 am". This option ignores
+               TIME, requires parsedatetime package
+-S, --stopwatch
+               stopwatch mode
+-s, --start    start timer when urtimer starts
+-D, --no-ds    do not show deciseconds
+-T, --no-title
+               do not set window title
+-w FILE, --write-elapsed FILE
+               write final elapsed time to FILE
 
 
-Features
-========
+Functions
+=========
 
-* Modes
-
-    - Countdown timer
-    - Stopwatch (``-S`` or ``--stopwatch``)
-
-* Support sleep-like suffixes like "d", "h", "m", and "s".
-* Support countdown date (``-d`` or ``--date``) like "noon" or "tomorrow 1 am"
-* Window title updating
-
-
-Installation
-============
-
-You can install urtimer via pip:
-
-.. code::
-
-  pip install urtimer
+1. Countdown timer: when reaches zero, the program exits.
+2. Stopwatch (``-S`` or ``--stopwatch``)
 
 
 Controls
@@ -72,41 +83,19 @@ Mouse
 Dependencies
 ============
 
-urwid_
+urwid
   the UI library
 
-parsedatetime_
+parsedatetime
   only required for ``-d`` or ``--date`` option.
 
   .. code::
 
     pip install parsedatetime
 
-.. _urwid: https://pypi.python.org/pypi/urwid/
-.. _parsedatetime: https://pypi.python.org/pypi/parsedatetime/
-
-
-Issues and Contributions
-========================
-
-Feel free to open an issue in `issue tracker`_ for bugs, feature requests, or pull requests.
-
-.. _issue tracker: https://bitbucket.org/livibetter/urtimer/issues
-
-
-Copyright
-=========
-
-urtimer is licensed under the MIT License, see COPYING_.
-
-.. _COPYING: https://bitbucket.org/livibetter/urtimer/raw/tip/COPYING
-
 
 Resources
 =========
 
-* PyPI_
-* Website_
-
-.. _PyPI: https://pypi.python.org/pypi/urtimer
-.. _Website: https://bitbucket.org/livibetter/urtimer
+Website: https://bitbucket.org/livibetter/urtimer
+PyPI: https://pypi.python.org/pypi/urtimer
