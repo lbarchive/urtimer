@@ -20,7 +20,7 @@ It looks like::
   |                                                         |
   +---------------------------------------------------------+
 
-You can also watch a `demostration clip`__.
+You can also watch a `demonstration clip`__.
 
 __ http://youtu.be/ypqxhV5SIgE
 
@@ -46,7 +46,7 @@ Installation
 
 You can install urtimer via pip:
 
-.. code::
+.. code:: sh
 
   pip install urtimer
 
@@ -78,7 +78,7 @@ urwid_
 parsedatetime_
   only required for ``-d`` or ``--date`` option.
 
-  .. code::
+  .. code:: sh
 
     pip install parsedatetime
 
