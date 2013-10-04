@@ -33,8 +33,8 @@ Features
 
 * Modes
 
-    - Countdown timer
-    - Stopwatch (``-S`` or ``--stopwatch``)
+  - Countdown timer
+  - Stopwatch (``-S`` or ``--stopwatch``)
 
 * Support sleep-like suffixes like "d", "h", "m", and "s".
 * Support countdown date (``-d`` or ``--date``) like "noon" or "tomorrow 1 am"
