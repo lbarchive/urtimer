@@ -7,9 +7,9 @@ A simple countdown timer and stopwatch using urwid.
 ---------------------------------------------------
 
 :Author: Yu-Jie Lin <livibetter@gmail.com>
-:Date: 2013-10-02
+:Date: 2013-10-10
 :Copyright: Copyright 2011-2013 Yu-Jie Lin. MIT License.
-:Version: 0.5.1
+:Version: 0.6.0
 :Manual section: 1
 :Manual group: User Commands
 

@@ -9,6 +9,10 @@ CHANGES
 Development
 ===========
 
+
+Release 0.6.0: 2013-10-10T08:26:48Z
+===================================
+
 + add ``-f``, ``--font`` for changing default font. (#3)
 + add ``-u``, ``--utf8`` to force UTF-8 encoding. (#3)
 
