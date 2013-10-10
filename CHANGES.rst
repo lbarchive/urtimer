@@ -10,6 +10,7 @@ Development
 ===========
 
 + add ``-f``, ``--font`` for changing default font. (#3)
++ add ``-u``, ``--utf8`` to force UTF-8 encoding. (#3)
 
 
 Release 0.5.1: 2013-10-02T02:05:01Z

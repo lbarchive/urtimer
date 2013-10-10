@@ -43,6 +43,7 @@ TIME specify the countdown time in format of NUMBER[SUFFIX], SUFFIX can be 'd', 
 -v, --version  show program's version number and exit
 -f FONT, --font FONT
                set font
+-u, --utf8     force UTF-8 encoding
 -d DATE, --date DATE
                calculate countdown from the date, for example, "5:35
                PM", "noon", or "tomorrow 1 am". This option ignores

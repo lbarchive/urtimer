@@ -219,6 +219,8 @@ def main():
                       help=('set font, available fonts: %s. '
                             '* means UTF-8 required. '
                             '(default: %%(default)s)' % fontlist))
+  parser.add_argument('-u', '--utf8', action='store_true',
+                      help='force UTF-8 encoding')
   parser.add_argument('-d', '--date',
                       help=('calculate countdown from the date, for example, '
                             '"5:35 PM", "noon", or "tomorrow 1 am". '
@@ -265,6 +267,15 @@ def main():
   if args.font not in fonts:
     print('No such font: %s' % args.font, file=sys.stderr)
     sys.exit(1)
+
+  if args.utf8:
+    urwid.set_encoding('UTF-8')
+
+  if sys.stdout.encoding != 'UTF-8' and fonts[args.font]().utf8_required:
+    print('Warning: "%s" requires UTF-8, '
+          'but your terminal does not support it, '
+          'try --font to change font or '
+          '--utf8 to force the encoding.' % args.font, file=sys.stderr)
 
   timer = TimerWidget(mode=mode, t=total_time, font=fonts[args.font](),
                       no_ds=args.no_ds, no_title=args.no_title)
