@@ -6,6 +6,12 @@ CHANGES
   :local:
 
 
+Development
+===========
+
++ add ``-f``, ``--font`` for changing default font. (#3)
+
+
 Release 0.5.1: 2013-10-02T02:05:01Z
 ===================================
 

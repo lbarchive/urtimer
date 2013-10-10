@@ -40,6 +40,9 @@ __author__ = 'Yu-Jie Lin'
 __email__ = 'livibetter@gmail.com'
 
 
+DEFAULT_FONT = 'Half Block 6x5'
+
+
 class UserInterrupt(Exception):
 
   pass
@@ -60,7 +63,8 @@ class TimerWidget(urwid.BigText):
     self.no_ds = no_ds
     self.no_title = no_title
     self.set_text(self.format_text(t))
-    if not font:
+    self.font = font
+    if not self.font:
       self.font = urwid.HalfBlock6x5Font()
     self.__super.__init__(self.get_text()[0], self.font)
 
@@ -208,6 +212,13 @@ def main():
 
   parser = argparse.ArgumentParser(description=__description__,
                                    version=__version__)
+  fonts = dict(urwid.get_all_fonts())
+  fontlist = ', '.join(('"%s"%s' % (n, ' *' if f().utf8_required else '')
+                       for n, f in fonts.items()))
+  parser.add_argument('-f', '--font', default=DEFAULT_FONT,
+                      help=('set font, available fonts: %s. '
+                            '* means UTF-8 required. '
+                            '(default: %%(default)s)' % fontlist))
   parser.add_argument('-d', '--date',
                       help=('calculate countdown from the date, for example, '
                             '"5:35 PM", "noon", or "tomorrow 1 am". '
@@ -251,8 +262,12 @@ def main():
     mode = 'stopwatch'
     total_time = 0
 
-  timer = TimerWidget(mode=mode, t=total_time, no_ds=args.no_ds,
-                      no_title=args.no_title)
+  if args.font not in fonts:
+    print('No such font: %s' % args.font, file=sys.stderr)
+    sys.exit(1)
+
+  timer = TimerWidget(mode=mode, t=total_time, font=fonts[args.font](),
+                      no_ds=args.no_ds, no_title=args.no_title)
   timer_pad = urwid.Padding(timer, align='center', width='clip')
   timer_fill = urwid.Filler(timer_pad)
 
