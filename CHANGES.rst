@@ -16,6 +16,9 @@ Development
   + test packages build
   + test with ``LC_ALL=C`` for locale specific issues
 
+* fix certain locales causing ``UnicodeDecodeError`` in Python 3
+* fix ``--version`` with Python 3 argparse
+
 
 Release 0.6.0: 2013-10-10T08:26:48Z
 ===================================

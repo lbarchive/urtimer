@@ -49,7 +49,7 @@ class build_manpages(Command):
   def run(self):
 
     print('building manpages')
-    with open('urtimer.1.rst') as f:
+    with codecs.open('urtimer.1.rst', encoding='utf8') as f:
       source = f.read()
 
     doc_parts = publish_parts(
@@ -162,10 +162,13 @@ class cmd_pyflakes(Command):
 
 # ============================================================================
 
-with open(script_name) as f:
+with codecs.open(script_name, encoding='utf8') as f:
   # There will be a '\n', with eval(), it's safe to ignore
   g = (line.split('=') for line in f if line.startswith('__'))
   meta = dict((k.strip(' _'), eval(v)) for k, v in g)
+
+with codecs.open('README.rst', encoding='utf8') as f:
+  long_description = f.read()
 
 classifiers = [
   'Development Status :: 5 - Production/Stable',
@@ -186,7 +189,7 @@ setup_d = dict(
   url=meta['website'],
 
   description=meta['description'],
-  long_description=open('README.rst').read(),
+  long_description=long_description,
 
   classifiers=classifiers,
 
