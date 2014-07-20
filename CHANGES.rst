@@ -9,6 +9,13 @@ CHANGES
 Development
 ===========
 
+* Makefile
+
+  * rename target ``install_test`` to ``test_setup``
+  * change invocation of virtualenv
+  + test packages build
+  + test with ``LC_ALL=C`` for locale specific issues
+
 
 Release 0.6.0: 2013-10-10T08:26:48Z
 ===================================
