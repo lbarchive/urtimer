@@ -31,7 +31,7 @@ import urwid
 
 
 __program__ = 'urtimer'
-__version__ = '0.6.0'
+__version__ = '0.6.1'
 __license__ = 'MIT License'
 __description__ = 'Simple countdown timer and stopwatch using urwid'
 __website__ = 'https://bitbucket.org/livibetter/urtimer'

@@ -9,6 +9,9 @@ CHANGES
 Development
 ===========
 
+Release 0.6.1: 2014-07-20T10:02:49Z
+===================================
+
 * Makefile
 
   * rename target ``install_test`` to ``test_setup``
